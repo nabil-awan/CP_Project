@@ -1,0 +1,1452 @@
+### Setting up screen
+
+screen -S batch2
+TMOUT=$((96 * 3600))
+export TMOUT
+screen -r 3534617.batch2
+
+
+### Changing the directory to where the downloaded files are
+
+cd /storage07/nawan2/CP_Project_Batch2/
+
+(base) [nawan2@hodor01] (3)$ ls
+Alisch_40_Emseq1.202448.tar.bz2  Alisch_40_Emseq5.202448.tar.bz2  Project_Alisch_40_Emseq1_multiqc_report.html  Project_Alisch_40_Emseq5_multiqc_report.html
+Alisch_40_Emseq2.202448.tar.bz2  Alisch_40_Emseq6.202448.tar.bz2  Project_Alisch_40_Emseq2_multiqc_report.html  Project_Alisch_40_Emseq6_multiqc_report.html
+Alisch_40_Emseq3.202448.tar.bz2  Alisch_40_Emseq7.202448.tar.bz2  Project_Alisch_40_Emseq3_multiqc_report.html  Project_Alisch_40_Emseq7_multiqc_report.html
+Alisch_40_Emseq4.202448.tar.bz2  Alisch_40_Emseq8.202448.tar.bz2  Project_Alisch_40_Emseq4_multiqc_report.html  Project_Alisch_40_Emseq8_multiqc_report.html
+
+(base) [nawan2@hodor01] (5)$ ls *.tar.bz2
+Alisch_40_Emseq1.202448.tar.bz2  Alisch_40_Emseq3.202448.tar.bz2  Alisch_40_Emseq5.202448.tar.bz2  Alisch_40_Emseq7.202448.tar.bz2
+Alisch_40_Emseq2.202448.tar.bz2  Alisch_40_Emseq4.202448.tar.bz2  Alisch_40_Emseq6.202448.tar.bz2  Alisch_40_Emseq8.202448.tar.bz2
+
+
+### Unzipping the .tar.bz2 files
+
+tar -xvjf Alisch_40_Emseq1.202448.tar.bz2  
+tar -xvjf Alisch_40_Emseq2.202448.tar.bz2  
+tar -xvjf Alisch_40_Emseq3.202448.tar.bz2  
+tar -xvjf Alisch_40_Emseq4.202448.tar.bz2
+tar -xvjf Alisch_40_Emseq5.202448.tar.bz2  
+tar -xvjf Alisch_40_Emseq6.202448.tar.bz2  
+tar -xvjf Alisch_40_Emseq7.202448.tar.bz2
+tar -xvjf Alisch_40_Emseq8.202448.tar.bz2
+
+
+
+### List of all RLD files to be used in the alignment process:
+
+# a-1
+RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001.fastq.gz  
+RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R2_001.fastq.gz  
+
+# a-2
+RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001.fastq.gz  
+RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R2_001.fastq.gz  
+
+# a-3
+RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001.fastq.gz  
+RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R2_001.fastq.gz  
+
+# a-4
+RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001.fastq.gz  
+RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R2_001.fastq.gz  
+
+# a-5
+RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001.fastq.gz  
+RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R2_001.fastq.gz  
+
+# a-6
+RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001.fastq.gz  
+RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R2_001.fastq.gz  
+
+# a-7
+RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001.fastq.gz  
+RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R2_001.fastq.gz  
+
+# a-8
+RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001.fastq.gz  
+RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R2_001.fastq.gz  
+
+# a-9
+RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001.fastq.gz  
+RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R2_001.fastq.gz  
+
+# a-10
+RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001.fastq.gz  
+RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R2_001.fastq.gz  
+
+# a-11
+RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001.fastq.gz  
+RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R2_001.fastq.gz
+
+# a-12
+RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001.fastq.gz
+RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R2_001.fastq.gz
+
+# a-13
+RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001.fastq.gz
+RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R2_001.fastq.gz
+
+# a-14
+RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001.fastq.gz
+RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R2_001.fastq.gz
+
+# a-15
+RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001.fastq.gz
+RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R2_001.fastq.gz
+
+# a-16
+RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001.fastq.gz
+RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R2_001.fastq.gz
+
+
+########################
+### Alignment codes
+########################
+
+Format: 
+bismark --multicore 16 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/ID_R1.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/ID_R1.fastq.gz --maxins 1000
+
+
+## a-1 
+
+screen -S a1
+
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 262153.a1
+
+screen -X -S 262153.a1 quit
+(Done!)
+
+
+
+## a-2 
+
+screen -S a2
+
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 267332.a2
+
+screen -X -S 267332.a2 quit
+(Done!)
+
+
+## a-3
+
+screen -S a3
+
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 267666.a3
+
+screen -X -S 267666.a3 quit
+(Done!)
+
+
+## a-4
+
+screen -S a4
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 20 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 878485.a4
+
+screen -X -S 878485.a4 quit
+(Only BAM, no report, Running!)
+
+
+## a-5 
+
+screen -S a5
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 36 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 1346157.a5
+
+# To force detach and connect:
+screen -r -d 1346157.a5
+
+screen -X -S 1346157.a5 quit
+(Only BAM, no report, Running!)
+
+
+## a-6 
+
+screen -S a6
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 20 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 4064226.a6
+
+screen -X -S 4064226.a6 quit
+(Done!)
+
+
+## a-7 
+
+screen -S a7
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 20 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r -d 4063863.a7
+
+screen -X -S 4063863.a7 quit
+(Done!)
+
+
+## a-8 
+
+screen -S a8
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 128869.a8
+screen -r -d 128869.a8
+
+screen -X -S 128869.a8 quit
+(Done!)
+
+
+## a-9 
+
+screen -S a9
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 129147.a9
+screen -r -d 129147.a9
+
+screen -X -S 129147.a9 quit
+(Done!)
+
+
+## a-10 
+
+screen -S a10
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r -d 186736.a10
+
+screen -X -S 186736.a10 quit
+(Done!)
+
+
+
+## a-11 
+
+screen -S a11
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 20 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r -d 2634991.a11
+
+screen -X -S 2634991.a11 quit
+(Done!)
+
+
+## a-12
+
+screen -S a12
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 2792581.a12
+screen -r -d 2792581.a12
+
+screen -X -S 2792581.a12 quit
+(Done!)
+
+
+## a-13 
+
+screen -S a13
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 32 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 1754627.a13
+
+screen -X -S 1754627.a13 quit
+(Done!)
+
+
+## a-14
+
+screen -S a14
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 36 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r -d 154466.a14
+
+screen -X -S 154466.a14 quit
+(Done!)
+
+
+## a-15 
+
+screen -S a15
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 32 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r -d 2310290.a15
+
+screen -X -S 2310290.a15 quit
+(Done!)
+
+
+## a-16 
+
+screen -S a16
+
+TMOUT=$((168 * 3600))
+export TMOUT
+cd /storage07/nawan2/CP_Project_Batch2/BAM_Files/
+conda activate bismark
+bismark --multicore 32 --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ -1 /storage07/nawan2/CP_Project_Batch2/RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001.fastq.gz -2 /storage07/nawan2/CP_Project_Batch2/RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R2_001.fastq.gz --maxins 1000
+
+
+screen -r 1183656.a16
+
+screen -X -S 1183656.a16 quit
+(Done!)
+
+
+###############################
+### List of BAM files produced
+###############################
+
+# a-1
+RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-2
+RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-3
+RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-4
+RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-5
+RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-6
+RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-7
+RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-8
+RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-9
+RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-10
+RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-11
+RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001_bismark_bt2_pe.bam  
+
+# a-12
+RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001_bismark_bt2_pe.bam
+
+# a-13
+RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001_bismark_bt2_pe.bam
+
+# a-14
+RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001_bismark_bt2_pe.bam
+
+# a-15
+RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001_bismark_bt2_pe.bam
+
+# a-16
+RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001_bismark_bt2_pe.bam
+
+
+
+###########################
+### Deduplication codes
+###########################
+
+## a-1
+
+screen -S a1
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3256928.a1
+
+screen -X -S 3256928.a1 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001_bismark_bt2_pe.bam:    436772144
+Total number duplicated alignments removed:     163360322 (37.40%)
+Duplicated alignments were found at:    93791881 different position(s)
+
+Total count of deduplicated leftover sequences: 273411822 (62.60% of total)
+
+
+
+## a-2
+
+screen -S a2
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3257146.a2
+
+screen -X -S 3257146.a2 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001_bismark_bt2_pe.bam:    416171465
+Total number duplicated alignments removed:     155203267 (37.29%)
+Duplicated alignments were found at:    89144518 different position(s)
+
+Total count of deduplicated leftover sequences: 260968198 (62.71% of total)
+
+
+## a-3
+
+screen -S a3
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3257341.a3
+
+screen -X -S 3257341.a3 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001_bismark_bt2_pe.bam:    491452591
+Total number duplicated alignments removed:     199327922 (40.56%)
+Duplicated alignments were found at:    109081669 different position(s)
+
+Total count of deduplicated leftover sequences: 292124669 (59.44% of total)
+
+
+
+## a-4
+
+screen -S a4
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3257509.a4
+
+screen -X -S 3257509.a4 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001_bismark_bt2_pe.bam:    440616467
+Total number duplicated alignments removed:     173936590 (39.48%)
+Duplicated alignments were found at:    97834201 different position(s)
+
+Total count of deduplicated leftover sequences: 266679877 (60.52% of total)
+
+
+
+## a-5
+
+screen -S a5
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 752845.a5
+
+screen -X -S 752845.a5 quit
+(Rerunning!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001_bismark_bt2_pe.bam:    408147375
+Total number duplicated alignments removed:     51446370 (12.60%)
+Duplicated alignments were found at:    35757760 different position(s)
+
+Total count of deduplicated leftover sequences: 356701005 (87.40% of total)
+
+
+## a-6
+
+screen -S a6
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3257905.a6
+
+screen -X -S 3257905.a6 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001_bismark_bt2_pe.bam:    415028052
+Total number duplicated alignments removed:     158986116 (38.31%)
+Duplicated alignments were found at:    89316505 different position(s)
+
+Total count of deduplicated leftover sequences: 256041936 (61.69% of total)
+
+
+
+## a-7
+
+screen -S a7
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3258063.a7
+
+screen -X -S 3258063.a7 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001_bismark_bt2_pe.bam:    364586310
+Total number duplicated alignments removed:     138481469 (37.98%)
+Duplicated alignments were found at:    77761768 different position(s)
+
+Total count of deduplicated leftover sequences: 226104841 (62.02% of total)
+
+
+
+## a-8
+
+screen -S a8
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3258225.a8
+
+screen -X -S 3258225.a8 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001_bismark_bt2_pe.bam:    440434883
+Total number duplicated alignments removed:     174629355 (39.65%)
+Duplicated alignments were found at:    95934016 different position(s)
+
+Total count of deduplicated leftover sequences: 265805528 (60.35% of total)
+
+
+
+## a-9
+
+screen -S a9
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3258394.a9
+
+screen -X -S 3258394.a9 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001_bismark_bt2_pe.bam:    440340784
+Total number duplicated alignments removed:     176810030 (40.15%)
+Duplicated alignments were found at:    97220556 different position(s)
+
+Total count of deduplicated leftover sequences: 263530754 (59.85% of total)
+
+
+## a-10
+
+screen -S a10
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r -d 3258558.a10
+
+screen -X -S 3258558.a10 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001_bismark_bt2_pe.bam:    402534816
+Total number duplicated alignments removed:     149737939 (37.20%)
+Duplicated alignments were found at:    85585211 different position(s)
+
+Total count of deduplicated leftover sequences: 252796877 (62.80% of total)
+
+
+## a-11
+
+screen -S a11
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3258718.a11
+
+screen -X -S 3258718.a11 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001_bismark_bt2_pe.bam:    399436149
+Total number duplicated alignments removed:     152132430 (38.09%)
+Duplicated alignments were found at:    84948848 different position(s)
+
+Total count of deduplicated leftover sequences: 247303719 (61.91% of total)
+
+
+
+## a-12
+
+screen -S a12
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3258874.a12
+
+screen -X -S 3258874.a12 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001_bismark_bt2_pe.bam:    374055870
+Total number duplicated alignments removed:     136178594 (36.41%)
+Duplicated alignments were found at:    78406026 different position(s)
+
+Total count of deduplicated leftover sequences: 237877276 (63.59% of total)
+
+
+
+## a-13
+
+screen -S a13
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3259074.a13
+
+screen -X -S 3259074.a13 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001_bismark_bt2_pe.bam:    405905886
+Total number duplicated alignments removed:     169095923 (41.66%)
+Duplicated alignments were found at:    92037895 different position(s)
+
+Total count of deduplicated leftover sequences: 236809963 (58.34% of total)
+
+
+
+## a-14
+
+screen -S a14
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3259236.a14
+
+screen -X -S 3259236.a14 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001_bismark_bt2_pe.bam:    444314822
+Total number duplicated alignments removed:     181693091 (40.89%)
+Duplicated alignments were found at:    100561515 different position(s)
+
+Total count of deduplicated leftover sequences: 262621731 (59.11% of total)
+
+
+
+## a-15
+
+screen -S a15
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3259458.a15
+
+screen -X -S 3259458.a15 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001_bismark_bt2_pe.bam:    455202029
+Total number duplicated alignments removed:     188133163 (41.33%)
+Duplicated alignments were found at:    101511911 different position(s)
+
+Total count of deduplicated leftover sequences: 267068866 (58.67% of total)
+
+
+
+## a-16
+
+screen -S a16
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001_bismark_bt2_pe.bam --output_dir /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+
+
+screen -r 3259624.a16
+
+screen -X -S 3259624.a16 quit
+(Done!)
+
+Total number of alignments analysed in /storage07/nawan2/CP_Project_Batch2/BAM_Files/RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001_bismark_bt2_pe.bam:    414184502
+Total number duplicated alignments removed:     167049987 (40.33%)
+Duplicated alignments were found at:    90239384 different position(s)
+
+Total count of deduplicated leftover sequences: 247134515 (59.67% of total)
+
+
+##############################
+### List of deduplicated files
+##############################
+
+(base) [nawan2@hodor03] (16)$ cd /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/
+(base) [nawan2@hodor03] (17)$ ls
+RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001_bismark_bt2_pe.deduplication_report.txt
+
+
+
+#################################################
+### Downloading the analysis files from Illinois
+#################################################
+
+### Illinois File: Dragen_Analysis.tar.bz2 has a huge size of 3864.18 GB. So, instead of storage07, I'm going put them on storage09 because it has 41T of free space in it.
+
+cd /storage09/
+
+cd /storage09/nawan2/CP_Project_Batch2/
+
+cd /storage09/nawan2/CP_Project_Batch2/Dragen_Analysis_Files_Illinois/
+
+curl -o Dragen_Analysis.tar.bz2 -L "https://posting.biotech.illinois.edu/posting/alisch/Dragen_Analysis.tar.bz2?x-email=alisch%40neurosurgery.wisc.edu&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=posting%2F20240724%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240724T112622Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=f2942ef61e5c7b24cd8734273022a1f701c7031322fdbe50e307fda49226af16"
+
+screen -r 3092027.download
+
+screen -X -S 3092027.download quit
+
+# To just list files inside the .tar.bz2 file
+
+tar -tvjf Dragen_Analysis.tar.bz2
+
+
+#################################################
+### Methylation extraction process
+#################################################
+
+cd /storage07/nawan2/CP_Project_Batch2/
+mkdir IDwise_Methylation_Extraction_Files
+
+# a-1
+RLD0975AXF01
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AXF01
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF01/
+
+screen -S RLD0975AXF01
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF01/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 3750302.RLD0975AXF01
+
+screen -X -S 3750302.RLD0975AXF01 quit
+(Done!)
+
+
+# a-2
+RLD0975AXF02
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AXF02
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF02/
+
+screen -S RLD0975AXF02
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF02/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 3752473.RLD0975AXF02
+
+screen -X -S 3752473.RLD0975AXF02 quit
+(Done!)
+
+# See the size of the generated files
+ls -lh
+
+# a-3
+RLD0975AXF04
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AXF04
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF04/
+
+screen -S RLD0975AXF04
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF04/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 638598.RLD0975AXF04
+
+screen -X -S 638598.RLD0975AXF04 quit
+(Done!)
+
+
+# a-4
+RLD0975AXH01
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AXH01
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH01/
+
+screen -S RLD0975AXH01
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH01/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+
+screen -r 638947.RLD0975AXH01
+
+screen -X -S 638947.RLD0975AXH01 quit
+(Done!)
+
+
+# a-5
+RLD0975AXH02
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AXH02
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH02/
+
+screen -S RLD0975AXH02
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 32 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH02/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam
+
+screen -r 1307625.RLD0975AXH02
+
+screen -X -S 1307625.RLD0975AXH02 quit
+(Done!)
+
+
+
+# a-6
+RLD0975AXH03
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AXH03
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH03/
+
+screen -S RLD0975AXH03
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH03/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 640183.RLD0975AXH03
+
+screen -X -S 640183.RLD0975AXH03 quit
+(Done!)
+
+
+# a-7
+RLD0975AXH04
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AXH04
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH04/
+
+screen -S RLD0975AXH04
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH04/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 640494.RLD0975AXH04
+
+screen -X -S 640494.RLD0975AXH04 quit
+(Done!)
+
+
+# a-8
+RLD0975AYF01
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AYF01
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF01/
+
+screen -S RLD0975AYF01
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF01/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 640812.RLD0975AYF01
+
+screen -X -S 640812.RLD0975AYF01 quit
+(Done!)
+
+
+# a-9
+RLD0975AYF02
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AYF02
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF02/
+
+screen -S RLD0975AYF02
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF02/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 1903884.RLD0975AYF02
+
+screen -X -S 1903884.RLD0975AYF02 quit
+(Done!)
+
+
+# a-10
+RLD0975AYF03
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AYF03
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF03/
+
+screen -S RLD0975AYF03
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF03/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 1230688.RLD0975AYF03
+
+screen -X -S 1230688.RLD0975AYF03 quit
+(Done!)
+
+
+# a-11
+RLD0975AYF04
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AYF04
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF04/
+
+screen -S RLD0975AYF04
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF04/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 2461159.RLD0975AYF04
+
+screen -X -S 2461159.RLD0975AYF04 quit
+(Done!)
+
+
+# a-12
+RLD0975AYH01
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AYH01
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH01/
+
+screen -S RLD0975AYH01
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH01/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 2462041.RLD0975AYH01
+
+screen -X -S 2462041.RLD0975AYH01 quit
+(Done!)
+
+
+# a-13
+RLD0975AYH02
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AYH02
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH02/
+
+screen -S RLD0975AYH02
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH02/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 2825572.RLD0975AYH02
+
+screen -X -S 2825572.RLD0975AYH02 quit
+(Done!)
+
+
+# a-14
+RLD0975AYH03
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AYH03
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH03/
+
+screen -S RLD0975AYH03
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH03/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 2826420.RLD0975AYH03
+
+screen -X -S 2826420.RLD0975AYH03 quit
+(Done!)
+
+
+# a-15
+RLD0975AYH04
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975AYH04
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH04/
+
+screen -S RLD0975AYH04
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH04/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 3094306.RLD0975AYH04
+
+screen -X -S 3094306.RLD0975AYH04 quit
+(Done!)
+
+
+# a-16
+RLD0975BXF05
+
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/
+mkdir RLD0975BXF05
+cd /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975BXF05/
+
+screen -S RLD0975BXF05
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975BXF05/ /storage07/nawan2/CP_Project_Batch2/Deduplicated_Files/RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -r 3094649.RLD0975BXF05
+
+screen -X -S 3094649.RLD0975BXF05 quit
+(Done!)
+
+
+
+#################################### 
+### Collapse CpGs across strands
+#################################### 
+
+cd /storage07/nawan2/CP_Project_Batch2/
+mkdir Collapse_CpGs_IDwise
+
+### RLD0975AXF01
+
+screen -S RLD0975AXF01
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AXF01 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF01/RLD0975AXF01_TCTAGGAG-AGGTCACT_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 4097760.RLD0975AXF01
+
+screen -X -S 4097760.RLD0975AXF01 quit
+(Done!)
+
+
+### RLD0975AXF02
+
+screen -S RLD0975AXF02
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AXF02 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF02/RLD0975AXF02_TGCGTAAC-GATAGGCT_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 4097760.RLD0975AXF01
+
+screen -X -S 4097760.RLD0975AXF01 quit
+(Done!)
+
+
+### RLD0975AXF04
+
+screen -S RLD0975AXF04
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AXF04 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXF04/RLD0975AXF04_CTTGCTAG-GGAGATGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2747046.RLD0975AXF04
+
+screen -X -S 2747046.RLD0975AXF04 quit
+(Running!)
+
+
+### RLD0975BXF05
+
+screen -S RLD0975BXF05
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975BXF05 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975BXF05/RLD0975BXF05_AGCGAGAT-GATACTGG_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2754584.RLD0975BXF05
+
+screen -X -S 2754584.RLD0975BXF05 quit
+(Running!)
+
+
+### RLD0975AXH01
+
+screen -S RLD0975AXH01
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AXH01 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH01/RLD0975AXH01_TATGGCAC-TCTCGCAA_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2757905.RLD0975AXH01
+
+screen -X -S 2757905.RLD0975AXH01 quit
+(Running!)
+
+
+### RLD0975AXH02
+
+screen -S RLD0975AXH02
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AXH02 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH02/RLD0975AXH02_GAATCACC-CTTCGTTC_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 1809435.RLD0975AXH02
+
+screen -X -S 1809435.RLD0975AXH02 quit
+(Running!)
+
+
+### RLD0975AXH03
+
+screen -S RLD0975AXH03
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AXH03 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH03/RLD0975AXH03_GTAAGGTG-GCAATTCG_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2775806.RLD0975AXH03
+
+screen -X -S 2775806.RLD0975AXH03 quit
+(Running!)
+
+
+### RLD0975AXH04
+
+screen -S RLD0975AXH04
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AXH04 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AXH04/RLD0975AXH04_CGAGAGAA-TCTCTTCC_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2778133.RLD0975AXH04
+
+screen -X -S 2778133.RLD0975AXH04 quit
+(Running!)
+
+
+### RLD0975AYF01
+
+screen -S RLD0975AYF01
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AYF01 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF01/RLD0975AYF01_CGCAACTA-GAATCCGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2779986.RLD0975AYF01
+
+screen -X -S 2779986.RLD0975AYF01 quit
+(Running!)
+
+
+### RLD0975AYF02
+
+screen -S RLD0975AYF02
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AYF02 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF02/RLD0975AYF02_CACAGACT-TGGTACAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2782076.RLD0975AYF02
+
+screen -X -S 2782076.RLD0975AYF02 quit
+(Running!)
+
+
+### RLD0975AYF03
+
+screen -S RLD0975AYF03
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AYF03 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF03/RLD0975AYF03_TGGAAGCA-GTACTCTC_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2783394.RLD0975AYF03
+
+screen -X -S 2783394.RLD0975AYF03 quit
+(Running!)
+
+
+### RLD0975AYF04
+
+screen -S RLD0975AYF04
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AYF04 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYF04/RLD0975AYF04_CAATAGCC-TGCGTAGA_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2785436.RLD0975AYF04
+
+screen -X -S 2785436.RLD0975AYF04 quit
+(Done!)
+
+
+### RLD0975AYH01
+
+screen -S RLD0975AYH01
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AYH01 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH01/RLD0975AYH01_CTCGAACA-GGAATTGC_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2787197.RLD0975AYH01
+
+screen -X -S 2787197.RLD0975AYH01 quit
+(Running!)
+
+
+### RLD0975AYH02
+
+screen -S RLD0975AYH02
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AYH02 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH02/RLD0975AYH02_GGCAAGTT-CTTCTGAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2791178.RLD0975AYH02
+
+screen -X -S 2791178.RLD0975AYH02 quit
+(Running!)
+
+
+### RLD0975AYH03
+
+screen -S RLD0975AYH03
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AYH03 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH03/RLD0975AYH03_AGCTACCA-CTTAGGAC_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2792818.RLD0975AYH03
+
+screen -X -S 2792818.RLD0975AYH03 quit
+(Running!)
+
+
+### RLD0975AYH04
+
+screen -S RLD0975AYH04
+
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage07/nawan2/CP_Project_Batch2/Collapse_CpGs_IDwise/
+coverage2cytosine --genome_folder /storage07/nawan2/Reference_Genome_Mouse/ --merge_CpG -o RLD0975AYH04 /storage07/nawan2/CP_Project_Batch2/IDwise_Methylation_Extraction_Files/RLD0975AYH04/RLD0975AYH04_ATCTGACC-AAGTCGAG_L00M_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -r 2794716.RLD0975AYH04
+
+screen -X -S 2794716.RLD0975AYH04 quit
+(Running!)

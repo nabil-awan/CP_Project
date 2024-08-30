@@ -1,0 +1,2132 @@
+### Screen sessions
+
+# To open a new session
+screen -S new_session_name
+e.g.
+screen -S alignmment_session
+(ID and name: 2605887.alignmment_session)
+
+# To detach Ctrl+A+D
+
+# To see if any screen session is running
+screen -ls
+
+# To attach to it: (followed by the session ID or name)
+screen -r new_session_name
+e.g.
+screen -r 977562.download
+screen -r 2605887.alignmment_session
+
+# To kill the session
+screen -X -S 977562.download quit
+ 
+
+
+
+### Directories
+
+cd /storage09/nawan2
+
+ls -lh 
+
+# To change the pwd to just another folder within the pwd
+cd CP_project
+
+cd /storage09/nawan2
+
+mkdir Reference_Genome_Mouse
+
+cd /storage09/nawan2/Reference_Genome_Mouse
+
+# To delete a directory
+rm -r your_directory_path
+e.g.
+rm -r Converted_Ref_Genome
+
+# f you want to be prompted for confirmation before deleting each file within the directory, you can use the -i (interactive) option:
+rm -ri your_directory_path
+
+
+
+
+### Move the file "Mus_musculus.GRCm39.dna.primary_assembly.fa.gz" to "/storage09/nawan2" 
+
+mv Mus_musculus.GRCm39.dna.primary_assembly.fa.gz /storage09/nawan2
+
+
+
+### bismark_genome_preparation
+
+The bismark_genome_preparation tool is part of the Bismark suite, which is used for bisulfite sequence mapping and methylation analysis. To create a bisulfite-converted reference genome using the unconverted reference genome "Mus_musculus.GRCm39.dna.primary_assembly.fa.gz," you can follow these steps:
+
+First, make sure you have Bismark installed on your system.
+
+# Download the unconverted reference genome:
+bash code
+wget https://ftp.ensembl.org/pub/release-110/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz
+
+# Unzip the downloaded file:
+bash code
+gunzip Mus_musculus.GRCm39.dna.primary_assembly.fa.gz
+
+## Activate Bismark
+conda activate bismark 
+
+# Run the bismark_genome_preparation command. Specify the path to the directory where you want to store the bisulfite-converted genome:
+bash code
+bismark_genome_preparation .
+(in general:)
+bismark_genome_preparation --path /path/to/output_directory Mus_musculus.GRCm39.dna.primary_assembly.fa
+Replace "/path/to/output_directory" with the actual path where you want to store the converted genome.
+
+This command will create a bisulfite-converted version of the genome in the specified output directory. The converted genome files will be used by Bismark for bisulfite mapping and methylation analysis.
+
+
+
+### How to keep sessions alive:
+
+Settings>Configuration>SSH>Keepalive (tick)
+
+Certainly! Here's a step-by-step guide to add the TMOUT setting to your shell configuration file:
+
+Open MobaXterm:
+
+Launch MobaXterm and open a new terminal session.
+Choose a Configuration File:
+
+Decide whether you want to modify ~/.bashrc or ~/.bash_profile. These files are typically used for configuring Bash shell sessions.
+Edit the Chosen File:
+
+Use a text editor to open the chosen configuration file. You can use commands like nano or vi. For example:
+bash
+Copy code
+nano ~/.bashrc
+or
+bash
+Copy code
+nano ~/.bash_profile
+Add the TMOUT Setting:
+
+Add the following lines to the end of the file:
+
+bash
+Copy code
+TMOUT=$((24 * 3600))
+export TMOUT
+Alternatively, you can set it in one line:
+
+bash
+Copy code
+TMOUT=86400 ; export TMOUT
+Save the Changes:
+
+Save the changes in the text editor. In nano, you can do this by pressing Ctrl + X, then press Y to confirm, and finally press Enter.
+Apply the Changes:
+
+To apply the changes to your current session, you can either start a new terminal session or run the following command:
+bash
+Copy code
+source ~/.bashrc
+or
+bash
+Copy code
+source ~/.bash_profile
+This ensures that the updated TMOUT setting takes effect in the current session.
+
+Now, your shell session should stay alive for 24 hours of inactivity. If you open a new terminal session or start a new MobaXterm instance, the setting will be automatically applied. Adjust the TMOUT value or choose a different configuration file if needed.
+
+
+
+### Commands for the alignment process:
+
+First:
+conda activate bismark
+
+Note that whatever directory you are currently in is where the output files from bismark will be generated, unless you explicitly tell it otherwise
+cd Aligned_Files/
+
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/1_18_23_0_4M_GAACGAAG-GGTGATTC_L003_R1_001.fastq.gz -2 /storage09/nawan2/1_18_23_0_4M_GAACGAAG-GGTGATTC_L003_R2_001.fastq.gz
+
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/1_18_23_0_4M_GAACGAAG-GGTGATTC_L00M_R1_001.fastq.gz -2 /storage09/nawan2/1_18_23_0_4M_GAACGAAG-GGTGATTC_L00M_R2_001.fastq.gz
+
+# Merge two BAM files using Bismark:
+
+screen -S bam_join
+screen -r 76639.bam_join
+cd /storage09/nawan2/Aligned_Files/
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+samtools merge -h 1_18_23_0_4M_GAACGAAG-GGTGATTC_L003_R1_001_bismark_bt2_pe.bam 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.bam \
+1_18_23_0_4M_GAACGAAG-GGTGATTC_L003_R1_001_bismark_bt2_pe.bam \
+1_18_23_0_4M_GAACGAAG-GGTGATTC_L00M_R1_001_bismark_bt2_pe.bam
+
+
+
+
+##############################################################################################################
+### (Andy)
+### To combine fastqs first then align, very simply it could be done as such:
+
+     gunzip sampleID*
+     cat sampleID_L003_R1.fastq > sampleID_merged_R1.fastq
+     cat sampleID_L00M_R1.fastq >> sampleID_merged_R1.fastq
+     cat sampleID_L003_R2.fastq > sampleID_merged_R2.fastq
+     cat sampleID_L00M_R2.fastq >> sampleID_merged_R2.fastq
+     bismark [options] /path/to/genome -1 sampleID_merged_R1.fastq -2 sampleID_merged_R2.fastq
+
+Example code for steps downstream of bismark are as follow:
+
+# deduplication
+deduplicate_bismark -p --bam sampleID_pe.bam
+
+# methylation extraction
+bismark_methylation_extractor --bedGraph -p --multicore <INT> sampleID_pe.deduplicated.bam
+
+# collapse CpGs across strands
+coverage2cytosine --genome_folder /path/to/genome/ --merge_CpG -o outFile_prefix sampleID_pe.deduplicated.bismark.cov.gz
+##############################################################################################################
+
+
+##############################################################################################################
+### To combine the fastq files of L003 and L00M before alignment
+
+# Example:
+gunzip sampleID*
+cat sampleID_L003_R1.fastq > sampleID_merged_R1.fastq
+cat sampleID_L00M_R1.fastq >> sampleID_merged_R1.fastq
+cat sampleID_L003_R2.fastq > sampleID_merged_R2.fastq
+cat sampleID_L00M_R2.fastq >> sampleID_merged_R2.fastq
+
+zcat sampleID_L003_R1_001.fastq.gz sampleID_L00M_R1_001.fastq.gz > sampleID_merged_R1_001.fastq
+
+zcat sampleID_L003_R2_001.fastq.gz sampleID_L00M_R2_001.fastq.gz > sampleID_merged_R2_001.fastq
+
+
+gunzip 1_18_23_0_4M_GAACGAAG-GGTGATTC*
+cat 1_18_23_0_4M_GAACGAAG-GGTGATTC_L003_R1_001.fastq > 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001.fastq
+cat 1_18_23_0_4M_GAACGAAG-GGTGATTC_L00M_R1_001.fastq >> 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001.fastq
+cat 1_18_23_0_4M_GAACGAAG-GGTGATTC_L003_R2_001.fastq > 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R2_001.fastq
+cat 1_18_23_0_4M_GAACGAAG-GGTGATTC_L00M_R2_001.fastq >> 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R2_001.fastq
+
+zcat 1_18_23_0_4M_GAACGAAG-GGTGATTC_L003_R1_001.fastq.gz 1_18_23_0_4M_GAACGAAG-GGTGATTC_L00M_R1_001.fastq.gz > 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001.fastq
+
+zcat 1_18_23_0_4M_GAACGAAG-GGTGATTC_L003_R2_001.fastq.gz 1_18_23_0_4M_GAACGAAG-GGTGATTC_L00M_R2_001.fastq.gz > 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R2_001.fastq
+
+
+gunzip 1_25_23_0_3M_AAGACCGT-CAATCGAC*
+cat 1_25_23_0_3M_AAGACCGT-CAATCGAC_L003_R1_001.fastq > 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001.fastq
+cat 1_25_23_0_3M_AAGACCGT-CAATCGAC_L00M_R1_001.fastq >> 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001.fastq
+cat 1_25_23_0_3M_AAGACCGT-CAATCGAC_L003_R2_001.fastq > 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R2_001.fastq
+cat 1_25_23_0_3M_AAGACCGT-CAATCGAC_L00M_R2_001.fastq >> 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R2_001.fastq
+
+zcat 1_25_23_0_3M_AAGACCGT-CAATCGAC_L003_R1_001.fastq.gz 1_25_23_0_3M_AAGACCGT-CAATCGAC_L00M_R1_001.fastq.gz > 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001.fastq
+
+zcat 1_25_23_0_3M_AAGACCGT-CAATCGAC_L003_R2_001.fastq.gz 1_25_23_0_3M_AAGACCGT-CAATCGAC_L00M_R2_001.fastq.gz > 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R2_001.fastq
+
+
+gunzip 2_23_23_0_5M_CAGGTTCA-GGCGTTAT*
+cat 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_L003_R1_001.fastq > 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001.fastq
+cat 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_L00M_R1_001.fastq >> 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001.fastq
+cat 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_L003_R2_001.fastq > 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R2_001.fastq
+cat 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_L00M_R2_001.fastq >> 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R2_001.fastq
+
+zcat 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_L003_R1_001.fastq.gz 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_L00M_R1_001.fastq.gz > 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001.fastq
+
+zcat 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_L003_R2_001.fastq.gz 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_L00M_R2_001.fastq.gz > 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R2_001.fastq
+
+
+gunzip 3_2_23_0_3M_TTCCAGGT-AAGCACTG*
+cat 3_2_23_0_3M_TTCCAGGT-AAGCACTG_L003_R1_001.fastq > 3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001.fastq
+cat 3_2_23_0_3M_TTCCAGGT-AAGCACTG_L00M_R1_001.fastq >> 3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001.fastq
+cat 3_2_23_0_3M_TTCCAGGT-AAGCACTG_L003_R2_001.fastq > 3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R2_001.fastq
+cat 3_2_23_0_3M_TTCCAGGT-AAGCACTG_L00M_R2_001.fastq >> 3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R2_001.fastq
+
+zcat 3_2_23_0_3M_TTCCAGGT-AAGCACTG_L003_R1_001.fastq.gz 3_2_23_0_3M_TTCCAGGT-AAGCACTG_L00M_R1_001.fastq.gz > 3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001.fastq
+
+zcat 3_2_23_0_3M_TTCCAGGT-AAGCACTG_L003_R2_001.fastq.gz 3_2_23_0_3M_TTCCAGGT-AAGCACTG_L00M_R2_001.fastq.gz > 3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R2_001.fastq
+
+
+gunzip 3_23_23_0_3M_GAGAGTAC-TGCTTCCA*
+cat 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_L003_R1_001.fastq > 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001.fastq
+cat 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_L00M_R1_001.fastq >> 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001.fastq
+cat 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_L003_R2_001.fastq > 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R2_001.fastq
+cat 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_L00M_R2_001.fastq >> 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R2_001.fastq
+
+screen: 3037725.s1 
+
+zcat 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_L003_R1_001.fastq.gz 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_L00M_R1_001.fastq.gz > 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001.fastq
+
+zcat 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_L003_R2_001.fastq.gz 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_L00M_R2_001.fastq.gz > 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R2_001.fastq
+
+
+gunzip 3_23_23_1_3M_TACGGTCT-GCAATGGA*
+cat 3_23_23_1_3M_TACGGTCT-GCAATGGA_L003_R1_001.fastq > 3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001.fastq
+cat 3_23_23_1_3M_TACGGTCT-GCAATGGA_L00M_R1_001.fastq >> 3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001.fastq
+cat 3_23_23_1_3M_TACGGTCT-GCAATGGA_L003_R2_001.fastq > 3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R2_001.fastq
+cat 3_23_23_1_3M_TACGGTCT-GCAATGGA_L00M_R2_001.fastq >> 3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R2_001.fastq
+
+screen: 3038045.s2
+
+zcat 3_23_23_1_3M_TACGGTCT-GCAATGGA_L003_R1_001.fastq.gz 3_23_23_1_3M_TACGGTCT-GCAATGGA_L00M_R1_001.fastq.gz > 3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001.fastq
+
+zcat 3_23_23_1_3M_TACGGTCT-GCAATGGA_L003_R2_001.fastq.gz 3_23_23_1_3M_TACGGTCT-GCAATGGA_L00M_R2_001.fastq.gz > 3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R2_001.fastq
+
+
+gunzip 3_9_23_0_5M_CGAATTGC-CACCTTAC*
+cat 3_9_23_0_5M_CGAATTGC-CACCTTAC_L003_R1_001.fastq > 3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001.fastq
+cat 3_9_23_0_5M_CGAATTGC-CACCTTAC_L00M_R1_001.fastq >> 3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001.fastq
+cat 3_9_23_0_5M_CGAATTGC-CACCTTAC_L003_R2_001.fastq > 3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R2_001.fastq
+cat 3_9_23_0_5M_CGAATTGC-CACCTTAC_L00M_R2_001.fastq >> 3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R2_001.fastq
+
+screen: s3
+
+zcat 3_9_23_0_5M_CGAATTGC-CACCTTAC_L003_R1_001.fastq.gz 3_9_23_0_5M_CGAATTGC-CACCTTAC_L00M_R1_001.fastq.gz > 3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001.fastq
+
+zcat 3_9_23_0_5M_CGAATTGC-CACCTTAC_L003_R2_001.fastq.gz 3_9_23_0_5M_CGAATTGC-CACCTTAC_L00M_R2_001.fastq.gz > 3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R2_001.fastq
+
+
+gunzip 4_06_23_0_3M_CCAGTATC-ATCTCGCT*
+cat 4_06_23_0_3M_CCAGTATC-ATCTCGCT_L003_R1_001.fastq > 4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001.fastq
+cat 4_06_23_0_3M_CCAGTATC-ATCTCGCT_L00M_R1_001.fastq >> 4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001.fastq
+cat 4_06_23_0_3M_CCAGTATC-ATCTCGCT_L003_R2_001.fastq > 4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R2_001.fastq
+cat 4_06_23_0_3M_CCAGTATC-ATCTCGCT_L00M_R2_001.fastq >> 4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R2_001.fastq
+
+screen: s4
+
+zcat 4_06_23_0_3M_CCAGTATC-ATCTCGCT_L003_R1_001.fastq.gz 4_06_23_0_3M_CCAGTATC-ATCTCGCT_L00M_R1_001.fastq.gz > 4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001.fastq
+
+zcat 4_06_23_0_3M_CCAGTATC-ATCTCGCT_L003_R2_001.fastq.gz 4_06_23_0_3M_CCAGTATC-ATCTCGCT_L00M_R2_001.fastq.gz > 4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R2_001.fastq
+
+
+gunzip 4_20_23_0_3M_AGCCTATC-GTTACGCA*
+cat 4_20_23_0_3M_AGCCTATC-GTTACGCA_L003_R1_001.fastq > 4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001.fastq
+cat 4_20_23_0_3M_AGCCTATC-GTTACGCA_L00M_R1_001.fastq >> 4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001.fastq
+cat 4_20_23_0_3M_AGCCTATC-GTTACGCA_L003_R2_001.fastq > 4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R2_001.fastq
+cat 4_20_23_0_3M_AGCCTATC-GTTACGCA_L00M_R2_001.fastq >> 4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R2_001.fastq
+
+screen: s5
+
+zcat 4_20_23_0_3M_AGCCTATC-GTTACGCA_L003_R1_001.fastq.gz 4_20_23_0_3M_AGCCTATC-GTTACGCA_L00M_R1_001.fastq.gz > 4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001.fastq
+
+zcat 4_20_23_0_3M_AGCCTATC-GTTACGCA_L003_R2_001.fastq.gz 4_20_23_0_3M_AGCCTATC-GTTACGCA_L00M_R2_001.fastq.gz > 4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R2_001.fastq
+
+
+gunzip 4_20_23_1_1M_TCTACGCA-GGCTATTG*
+cat 4_20_23_1_1M_TCTACGCA-GGCTATTG_L003_R1_001.fastq > 4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001.fastq
+cat 4_20_23_1_1M_TCTACGCA-GGCTATTG_L00M_R1_001.fastq >> 4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001.fastq
+cat 4_20_23_1_1M_TCTACGCA-GGCTATTG_L003_R2_001.fastq > 4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R2_001.fastq
+cat 4_20_23_1_1M_TCTACGCA-GGCTATTG_L00M_R2_001.fastq >> 4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R2_001.fastq
+
+screen: s6
+
+zcat 4_20_23_1_1M_TCTACGCA-GGCTATTG_L003_R1_001.fastq.gz 4_20_23_1_1M_TCTACGCA-GGCTATTG_L00M_R1_001.fastq.gz > 4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001.fastq
+
+zcat 4_20_23_1_1M_TCTACGCA-GGCTATTG_L003_R2_001.fastq.gz 4_20_23_1_1M_TCTACGCA-GGCTATTG_L00M_R2_001.fastq.gz > 4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R2_001.fastq
+
+
+gunzip 4_20_23_1_3M_TCATCTCC-CTAGCAAG*
+cat 4_20_23_1_3M_TCATCTCC-CTAGCAAG_L003_R1_001.fastq > 4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001.fastq
+cat 4_20_23_1_3M_TCATCTCC-CTAGCAAG_L00M_R1_001.fastq >> 4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001.fastq
+cat 4_20_23_1_3M_TCATCTCC-CTAGCAAG_L003_R2_001.fastq > 4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R2_001.fastq
+cat 4_20_23_1_3M_TCATCTCC-CTAGCAAG_L00M_R2_001.fastq >> 4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R2_001.fastq
+
+screen: s7
+
+zcat 4_20_23_1_3M_TCATCTCC-CTAGCAAG_L003_R1_001.fastq.gz 4_20_23_1_3M_TCATCTCC-CTAGCAAG_L00M_R1_001.fastq.gz > 4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001.fastq
+
+zcat 4_20_23_1_3M_TCATCTCC-CTAGCAAG_L003_R2_001.fastq.gz 4_20_23_1_3M_TCATCTCC-CTAGCAAG_L00M_R2_001.fastq.gz > 4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R2_001.fastq
+
+
+gunzip 4_24_23_0_2M_TACTCCAG-CCTATACC*
+cat 4_24_23_0_2M_TACTCCAG-CCTATACC_L003_R1_001.fastq > 4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001.fastq
+cat 4_24_23_0_2M_TACTCCAG-CCTATACC_L00M_R1_001.fastq >> 4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001.fastq
+cat 4_24_23_0_2M_TACTCCAG-CCTATACC_L003_R2_001.fastq > 4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R2_001.fastq
+cat 4_24_23_0_2M_TACTCCAG-CCTATACC_L00M_R2_001.fastq >> 4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R2_001.fastq
+
+screen: s8
+
+zcat 4_24_23_0_2M_TACTCCAG-CCTATACC_L003_R1_001.fastq.gz 4_24_23_0_2M_TACTCCAG-CCTATACC_L00M_R1_001.fastq.gz > 4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001.fastq
+
+zcat 4_24_23_0_2M_TACTCCAG-CCTATACC_L003_R2_001.fastq.gz 4_24_23_0_2M_TACTCCAG-CCTATACC_L00M_R2_001.fastq.gz > 4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R2_001.fastq
+
+
+gunzip 4_24_23_0_4M_AGTGACCT-CTCCTAGA*
+cat 4_24_23_0_4M_AGTGACCT-CTCCTAGA_L003_R1_001.fastq > 4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001.fastq
+cat 4_24_23_0_4M_AGTGACCT-CTCCTAGA_L00M_R1_001.fastq >> 4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001.fastq
+cat 4_24_23_0_4M_AGTGACCT-CTCCTAGA_L003_R2_001.fastq > 4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R2_001.fastq
+cat 4_24_23_0_4M_AGTGACCT-CTCCTAGA_L00M_R2_001.fastq >> 4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R2_001.fastq
+
+screen: s9
+
+zcat 4_24_23_0_4M_AGTGACCT-CTCCTAGA_L003_R1_001.fastq.gz 4_24_23_0_4M_AGTGACCT-CTCCTAGA_L00M_R1_001.fastq.gz > 4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001.fastq
+
+zcat 4_24_23_0_4M_AGTGACCT-CTCCTAGA_L003_R2_001.fastq.gz 4_24_23_0_4M_AGTGACCT-CTCCTAGA_L00M_R2_001.fastq.gz > 4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R2_001.fastq
+
+
+gunzip 4_24_23_0_5M_CTGTACCA-AGTCTGTG*
+cat 4_24_23_0_5M_CTGTACCA-AGTCTGTG_L003_R1_001.fastq > 4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001.fastq
+cat 4_24_23_0_5M_CTGTACCA-AGTCTGTG_L00M_R1_001.fastq >> 4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001.fastq
+cat 4_24_23_0_5M_CTGTACCA-AGTCTGTG_L003_R2_001.fastq > 4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R2_001.fastq
+cat 4_24_23_0_5M_CTGTACCA-AGTCTGTG_L00M_R2_001.fastq >> 4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R2_001.fastq
+
+screen: s10
+
+zcat 4_24_23_0_5M_CTGTACCA-AGTCTGTG_L003_R1_001.fastq.gz 4_24_23_0_5M_CTGTACCA-AGTCTGTG_L00M_R1_001.fastq.gz > 4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001.fastq
+
+zcat 4_24_23_0_5M_CTGTACCA-AGTCTGTG_L003_R2_001.fastq.gz 4_24_23_0_5M_CTGTACCA-AGTCTGTG_L00M_R2_001.fastq.gz > 4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R2_001.fastq
+
+
+gunzip 4_24_23_0_8M_GCAATTCC-TGTTCGAG*
+cat 4_24_23_0_8M_GCAATTCC-TGTTCGAG_L003_R1_001.fastq > 4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001.fastq
+cat 4_24_23_0_8M_GCAATTCC-TGTTCGAG_L00M_R1_001.fastq >> 4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001.fastq
+cat 4_24_23_0_8M_GCAATTCC-TGTTCGAG_L003_R2_001.fastq > 4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R2_001.fastq
+cat 4_24_23_0_8M_GCAATTCC-TGTTCGAG_L00M_R2_001.fastq >> 4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R2_001.fastq
+
+screen: s11
+
+zcat 4_24_23_0_8M_GCAATTCC-TGTTCGAG_L003_R1_001.fastq.gz 4_24_23_0_8M_GCAATTCC-TGTTCGAG_L00M_R1_001.fastq.gz > 4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001.fastq
+
+zcat 4_24_23_0_8M_GCAATTCC-TGTTCGAG_L003_R2_001.fastq.gz 4_24_23_0_8M_GCAATTCC-TGTTCGAG_L00M_R2_001.fastq.gz > 4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R2_001.fastq
+
+
+gunzip 4_24_23_1_4M_TTGCGAGA-GTGCCATA*
+cat 4_24_23_1_4M_TTGCGAGA-GTGCCATA_L003_R1_001.fastq > 4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001.fastq
+cat 4_24_23_1_4M_TTGCGAGA-GTGCCATA_L00M_R1_001.fastq >> 4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001.fastq
+cat 4_24_23_1_4M_TTGCGAGA-GTGCCATA_L003_R2_001.fastq > 4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R2_001.fastq
+cat 4_24_23_1_4M_TTGCGAGA-GTGCCATA_L00M_R2_001.fastq >> 4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R2_001.fastq
+
+screen: s12
+
+zcat 4_24_23_1_4M_TTGCGAGA-GTGCCATA_L003_R1_001.fastq.gz 4_24_23_1_4M_TTGCGAGA-GTGCCATA_L00M_R1_001.fastq.gz > 4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001.fastq
+
+zcat 4_24_23_1_4M_TTGCGAGA-GTGCCATA_L003_R2_001.fastq.gz 4_24_23_1_4M_TTGCGAGA-GTGCCATA_L00M_R2_001.fastq.gz > 4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R2_001.fastq
+
+
+gunzip 6_24_23_0_2M_TAGGAGCT-GTTAAGGC*
+cat 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_L003_R1_001.fastq > 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001.fastq
+cat 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_L00M_R1_001.fastq >> 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001.fastq
+cat 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_L003_R2_001.fastq > 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R2_001.fastq
+cat 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_L00M_R2_001.fastq >> 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R2_001.fastq
+
+screen: s13
+
+zcat 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_L003_R1_001.fastq.gz 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_L00M_R1_001.fastq.gz > 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001.fastq
+
+zcat 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_L003_R2_001.fastq.gz 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_L00M_R2_001.fastq.gz > 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R2_001.fastq
+
+
+gunzip 6_24_23_0_3M_TCGGATTC-TAGTTGCG*
+cat 6_24_23_0_3M_TCGGATTC-TAGTTGCG_L003_R1_001.fastq > 6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001.fastq
+cat 6_24_23_0_3M_TCGGATTC-TAGTTGCG_L00M_R1_001.fastq >> 6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001.fastq
+cat 6_24_23_0_3M_TCGGATTC-TAGTTGCG_L003_R2_001.fastq > 6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R2_001.fastq
+cat 6_24_23_0_3M_TCGGATTC-TAGTTGCG_L00M_R2_001.fastq >> 6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R2_001.fastq
+
+screen: s14
+
+zcat 6_24_23_0_3M_TCGGATTC-TAGTTGCG_L003_R1_001.fastq.gz 6_24_23_0_3M_TCGGATTC-TAGTTGCG_L00M_R1_001.fastq.gz > 6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001.fastq
+
+zcat 6_24_23_0_3M_TCGGATTC-TAGTTGCG_L003_R2_001.fastq.gz 6_24_23_0_3M_TCGGATTC-TAGTTGCG_L00M_R2_001.fastq.gz > 6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R2_001.fastq
+
+
+gunzip 6_24_23_0_4M_GGAAGAGA-TTCTCTCG*
+cat 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_L003_R1_001.fastq > 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001.fastq
+cat 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_L00M_R1_001.fastq >> 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001.fastq
+cat 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_L003_R2_001.fastq > 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R2_001.fastq
+cat 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_L00M_R2_001.fastq >> 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R2_001.fastq
+
+screen: s15
+
+zcat 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_L003_R1_001.fastq.gz 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_L00M_R1_001.fastq.gz > 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001.fastq
+
+zcat 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_L003_R2_001.fastq.gz 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_L00M_R2_001.fastq.gz > 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R2_001.fastq
+
+
+gunzip 6_24_23_1_2M_CTCAGAAG-AACTTGCC*
+cat 6_24_23_1_2M_CTCAGAAG-AACTTGCC_L003_R1_001.fastq > 6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001.fastq
+cat 6_24_23_1_2M_CTCAGAAG-AACTTGCC_L00M_R1_001.fastq >> 6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001.fastq
+cat 6_24_23_1_2M_CTCAGAAG-AACTTGCC_L003_R2_001.fastq > 6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R2_001.fastq
+cat 6_24_23_1_2M_CTCAGAAG-AACTTGCC_L00M_R2_001.fastq >> 6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R2_001.fastq
+
+screen: s16
+
+zcat 6_24_23_1_2M_CTCAGAAG-AACTTGCC_L003_R1_001.fastq.gz 6_24_23_1_2M_CTCAGAAG-AACTTGCC_L00M_R1_001.fastq.gz > 6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001.fastq
+
+zcat 6_24_23_1_2M_CTCAGAAG-AACTTGCC_L003_R2_001.fastq.gz 6_24_23_1_2M_CTCAGAAG-AACTTGCC_L00M_R2_001.fastq.gz > 6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R2_001.fastq
+
+
+##############################################################################################################
+
+
+
+##############################################################################################################
+### Run the alignments on the merged files (merged over the lanes)
+
+
+First:
+conda activate bismark
+
+Note that whatever directory you are currently in is where the output files from bismark will be generated, unless you explicitly tell it otherwise
+cd Aligned_Files/
+
+
+# Example:
+bismark --multicore 32 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/sampleID_merged_R1_001.fastq -2 /storage09/nawan2/sampleID_merged_R2_001.fastq
+
+# With maximum insertion length extended to 1000 (default: 500)
+
+mkdir /storage09/nawan2/BAM_Files_updated
+
+# ID-1 
+screen -S id1
+screen -r 227679.id1
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001.fastq -2 /storage09/nawan2/1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 227679.id1 quit
+(Done!)
+
+# ID-2 
+screen -S id2
+screen -r 233139.id2
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001.fastq -2 /storage09/nawan2/1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 233139.id2 quit
+(Done!)
+
+
+
+# ID-3 
+screen -S id3
+screen -r 314712.id3
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001.fastq -2 /storage09/nawan2/2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 314712.id3 quit
+(Done!)
+
+
+
+# ID-4 
+screen -S id4
+screen -r 3146252.id4
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001.fastq -2 /storage09/nawan2/3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 3146252.id4 quit
+(Done!)
+
+
+# ID-5
+screen -S id5
+screen -r 730189.id5
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001.fastq -2 /storage09/nawan2/3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 730189.id5 quit
+(Done!)
+
+# ID-6 
+screen -S id6
+screen -r 880656.id6
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+#Testing with 4 cores
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001.fastq -2 /storage09/nawan2/3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 880656.id6 quit
+(Done!)
+
+
+# ID-7 
+screen -S id7
+screen -r 3396569.id7
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001.fastq -2 /storage09/nawan2/3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 3396569.id7 quit
+(Done!)
+
+# ID-8 
+screen -S id8
+screen -r 1087512.id8
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001.fastq -2 /storage09/nawan2/4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 1087512.id8 quit
+(Done!)
+
+# ID-9 
+screen -S id9
+screen -r 1335551.id9
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001.fastq -2 /storage09/nawan2/4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 1335551.id9 quit
+(Done!)
+
+# ID-10 
+screen -S id10
+screen -r 3827499.id10
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 16 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001.fastq -2 /storage09/nawan2/4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 3827499.id10 quit
+(Done!)
+
+# ID-11 
+screen -S id11
+screen -r 3253149.id11
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001.fastq -2 /storage09/nawan2/4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 3253149.id11 quit
+(Done!)
+
+# ID-12 
+screen -S id12
+screen -r 3253230.id12
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001.fastq -2 /storage09/nawan2/4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 3253230.id12 quit
+(Done!)
+
+# ID-13
+screen -S id13
+screen -r 3253300.id13
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001.fastq -2 /storage09/nawan2/4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 3253300.id13 quit
+(Done!)
+
+# ID-14 
+screen -S id14
+screen -r 3413373.id14
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001.fastq -2 /storage09/nawan2/4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 3413373.id14 quit
+(Done!)
+
+# ID-15 
+screen -S id15
+screen -r 3413450.id15
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001.fastq -2 /storage09/nawan2/4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 3413450.id15 quit
+(Done!)
+
+# ID-16 
+screen -S id16
+screen -r 1494522.id16
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001.fastq -2 /storage09/nawan2/4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 1494522.id16 quit
+(Done!)
+
+# ID-17 
+screen -S id17
+screen -r 1494599.id17
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001.fastq -2 /storage09/nawan2/6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 1494599.id17 quit
+(Done!)
+
+# ID-18
+screen -S id18
+screen -r 1494697.id18
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001.fastq -2 /storage09/nawan2/6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 1494697.id18 quit
+(Done!)
+
+# ID-19 
+screen -S id19
+screen -r 1663720.id19
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001.fastq -2 /storage09/nawan2/6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 1663720.id19 quit
+(Done!)
+
+# ID-20 
+screen -S id20
+screen -r 1663815.id20
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 4 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001.fastq -2 /storage09/nawan2/6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R2_001.fastq --maxins 1000
+
+screen -X -S 1663815.id20 quit
+(Done!)
+
+##############################################################################################################
+
+### Testing mapping efficiency
+
+### Subsetting 4 million reads from the forward and reverse files for the ID (3.23.23-0-3M) with the lowest mapping efficiency (41.7%) and running Bismark alignment with 4 options:
+# 1) regular alignment
+# 2) loosening the stringency for mapping reads with mismatches
+# 3) increasing the insertion length between the forward (R1) and reverse (R2) reads
+# 4) trimming off the first 20bp and the last 20bp
+
+cd /storage09/nawan2
+head -4000000 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001.fastq > subset_sample_R1.fq
+head -4000000 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R2_001.fastq > subset_sample_R2.fq
+
+# regular alignment
+screen -S id5.1
+screen -r 1013275.id5.1
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files_updated/
+conda activate bismark
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1.fq -2 /storage09/nawan2/subset_sample_R2.fq
+
+screen -X -S 1013275.id5.1 quit
+(!)
+
+# loosening the stringency for mapping reads with mismatches
+screen -S id5.2
+screen -r 1013844.id5.2
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files/
+mkdir loosen_stringency
+cd /storage09/nawan2/BAM_Files/loosen_stringency/
+conda activate bismark
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1.fq -2 /storage09/nawan2/subset_sample_R2.fq --score_min L,0,-0.4
+
+
+screen -X -S 1013844.id5.2 quit
+(!)
+
+# increasing the insertion length between the forward (R1) and reverse (R2) reads
+screen -S id5.3
+screen -r 1014906.id5.3
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files/
+mkdir increased_insertion_length
+cd /storage09/nawan2/BAM_Files/increased_insertion_length/
+conda activate bismark
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1.fq -2 /storage09/nawan2/subset_sample_R2.fq --maxins 1000
+
+screen -X -S 1014906.id5.3 quit
+(Done!)
+
+
+# both loosen stringency and increased the insertion length
+screen -S id5.4
+screen -r 1015192.id5.4
+TMOUT=$((96 * 3600))
+export TMOUT
+cd /storage09/nawan2/BAM_Files/
+mkdir both_loosen_insertion
+cd /storage09/nawan2/BAM_Files/both_loosen_insertion/
+conda activate bismark
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1.fq -2 /storage09/nawan2/subset_sample_R2.fq --score_min L,0,-0.4 --maxins 1000
+
+screen -X -S 1015192.id5.4 quit
+(Done!)
+
+# trimming
+awk '{if(NR%4==2) print substr($0, 21, length($0)-40); else print $0}' /storage09/nawan2/subset_sample_R1.fq > trimmed_subset_sample_R1.fq
+awk '{if(NR%4==2) print substr($0, 21, length($0)-40); else print $0}' /storage09/nawan2/subset_sample_R2.fq > trimmed_subset_sample_R2.fq
+
+fastp --in1 /storage09/nawan2/subset_sample_R1.fq --in2 /storage09/nawan2/subset_sample_R2.fq --out1 trimmed_subset_sample_R1.fq --out2 trimmed_subset_sample_R2.fq --cut_front --cut_front_window_size 20 --cut_tail --cut_tail_window_size 20 --cut_mean_quality 20
+
+conda create -n trm
+conda activate trm
+conda install -c bioconda trim-galore
+
+cd /storage09/nawan2/BAM_Files/
+mkdir trimmed_test
+cd /storage09/nawan2/BAM_Files/trimmed_test/
+
+trim_galore --paired --clip_R1 20 --clip_R2 20 --output_dir /storage09/nawan2/ /storage09/nawan2/subset_sample_R1.fq /storage09/nawan2/subset_sample_R2.fq
+
+conda deactivate
+
+conda activate bismark
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1_val_1.fq -2 /storage09/nawan2/subset_sample_R2_val_2.fq
+
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1_val_1.fq -2 /storage09/nawan2/subset_sample_R2_val_2.fq --score_min L,0,-0.4 --maxins 1000
+
+
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1_val_1.fq -2 /storage09/nawan2/subset_sample_R2_val_2.fq --maxins 1000
+
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1_val_1.fq -2 /storage09/nawan2/subset_sample_R2_val_2.fq --maxins 1500
+
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1.fq -2 /storage09/nawan2/subset_sample_R2.fq --maxins 1500
+
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/subset_sample_R1.fq -2 /storage09/nawan2/subset_sample_R2.fq --minins 200 --maxins 1500
+
+
+##############################################################################################################
+
+# List of all BAM files
+
+1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.bam         4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.bam
+1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_PE_report.txt  4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_PE_report.txt
+1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.bam         4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.bam
+1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_PE_report.txt  4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_PE_report.txt
+2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.bam         4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.bam
+2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_PE_report.txt  4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_PE_report.txt
+3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.bam          4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.bam
+3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_PE_report.txt   4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_PE_report.txt
+3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_pe.bam         4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.bam
+3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_PE_report.txt  4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_PE_report.txt
+3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.bam         4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.bam
+3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_PE_report.txt  4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_PE_report.txt
+3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.bam          6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.bam
+3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_PE_report.txt   6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_PE_report.txt
+4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.bam         6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.bam
+4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_PE_report.txt  6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_PE_report.txt
+4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.bam         6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.bam
+4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_PE_report.txt  6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_PE_report.txt
+4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.bam         6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.bam
+4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_PE_report.txt  6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_PE_report.txt
+
+# According to the serial as provided by Ligia
+
+cd /storage09/nawan2/BAM_Files_updated
+
+# ID-4
+cat 3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_PE_report.txt  
+# ID-6 
+cat 3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_PE_report.txt  
+# ID-2
+cat 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_PE_report.txt  
+# ID-3
+cat 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_PE_report.txt  
+# ID-17
+cat 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_PE_report.txt
+
+
+# ID-12
+cat 4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_PE_report.txt
+# ID-13
+cat 4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_PE_report.txt
+# ID-9
+cat 4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_PE_report.txt  
+# ID-11
+cat 4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_PE_report.txt
+# ID-8
+cat 4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_PE_report.txt  
+
+
+# ID-16
+cat 4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_PE_report.txt
+# ID-1
+cat 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_PE_report.txt  
+# ID-7
+cat 3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_PE_report.txt   
+# ID-19
+cat 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_PE_report.txt
+# ID-18
+cat 6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_PE_report.txt
+
+
+# ID-14
+cat 4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_PE_report.txt
+# ID-5
+cat 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_PE_report.txt  
+# ID-10
+cat 4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_PE_report.txt  
+# ID-15
+cat 4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_PE_report.txt
+# ID-20
+cat 6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_PE_report.txt
+
+
+
+
+
+##############################################################################################################
+
+# deduplication sample code by Andy
+deduplicate_bismark -p --bam sampleID_pe.bam
+
+screen -S id1
+screen -r 3658186.id1
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.bam:     315308178
+Total number duplicated alignments removed:     56657331 (17.97%)
+Duplicated alignments were found at:    42498597 different position(s)
+
+Total count of deduplicated leftover sequences: 258650847 (82.03% of total)
+
+screen -X -S 3658186.id1 quit
+(Done!)
+
+
+screen -S id2
+screen -r 3658265.id2
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.bam:     325604672
+Total number duplicated alignments removed:     62332481 (19.14%)
+Duplicated alignments were found at:    47286846 different position(s)
+
+Total count of deduplicated leftover sequences: 263272191 (80.86% of total)
+
+
+# cd /storage09/nawan2/BAM_Files/
+# deduplicate_bismark -p --bam 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.bam
+
+# mv /storage09/nawan2/BAM_Files/1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.deduplicated.bam /storage09/nawan2/Deduplicated_Files/
+
+# mv /storage09/nawan2/BAM_Files/1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt /storage09/nawan2/Deduplicated_Files/
+
+screen -X -S 3658265.id2 quit
+(Done!)
+
+
+screen -S id3
+screen -r 3658365.id3
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.bam:     313129440
+Total number duplicated alignments removed:     57401823 (18.33%)
+Duplicated alignments were found at:    42923061 different position(s)
+
+Total count of deduplicated leftover sequences: 255727617 (81.67% of total)
+
+screen -X -S 3658365.id3 quit
+(Done!)
+
+
+screen -S id4
+screen -r 3658461.id4
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.bam:      326815753
+Total number duplicated alignments removed:     60631577 (18.55%)
+Duplicated alignments were found at:    46003187 different position(s)
+
+Total count of deduplicated leftover sequences: 266184176 (81.45% of total)
+
+screen -X -S 3658461.id4 quit
+(Done!)
+
+
+screen -S id5
+screen -r 3658556.id5
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_pe.bam:     313941781
+Total number duplicated alignments removed:     65108312 (20.74%)
+Duplicated alignments were found at:    48526849 different position(s)
+
+Total count of deduplicated leftover sequences: 248833469 (79.26% of total)
+
+screen -X -S 3658556.id5 quit
+(Done!)
+
+
+screen -S id6
+screen -r 4043012.id6
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.bam:     325311061
+Total number duplicated alignments removed:     65122349 (20.02%)
+Duplicated alignments were found at:    49284764 different position(s)
+
+Total count of deduplicated leftover sequences: 260188712 (79.98% of total)
+
+screen -X -S 4043012.id6 quit
+(Done!)
+
+
+screen -S id7
+screen -r 4043090.id7
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.bam:      259467939
+Total number duplicated alignments removed:     42133982 (16.24%)
+Duplicated alignments were found at:    31990903 different position(s)
+
+Total count of deduplicated leftover sequences: 217333957 (83.76% of total)
+
+screen -X -S 4043090.id7 quit
+(Done!)
+
+
+screen -S id8
+screen -r 4043585.id8
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.bam:     311863318
+Total number duplicated alignments removed:     59532715 (19.09%)
+Duplicated alignments were found at:    44646571 different position(s)
+
+Total count of deduplicated leftover sequences: 252330603 (80.91% of total)
+
+screen -X -S 4043585.id8 quit
+(Done!)
+
+
+screen -S id9
+screen -r 1784450.id9
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.bam:     230111010
+Total number duplicated alignments removed:     42431157 (18.44%)
+Duplicated alignments were found at:    32080078 different position(s)
+
+Total count of deduplicated leftover sequences: 187679853 (81.56% of total)
+
+screen -X -S 1784450.id9 quit
+(Done!)
+
+
+screen -S id10
+screen -r 1784672.id10
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.bam:     306162338
+Total number duplicated alignments removed:     58296991 (19.04%)
+Duplicated alignments were found at:    43552782 different position(s)
+
+Total count of deduplicated leftover sequences: 247865347 (80.96% of total)
+
+screen -X -S 1784672.id10 quit
+(Done!)
+
+
+screen -S id11
+screen -r 3658834.id11
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.bam:     262827583
+Total number duplicated alignments removed:     51721905 (19.68%)
+Duplicated alignments were found at:    38440215 different position(s)
+
+Total count of deduplicated leftover sequences: 211105678 (80.32% of total)
+
+screen -X -S 3658834.id11 quit
+(Done!)
+
+
+screen -S id12
+screen -r 3658886.id12
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.bam:     309263646
+Total number duplicated alignments removed:     56926003 (18.41%)
+Duplicated alignments were found at:    42071470 different position(s)
+
+Total count of deduplicated leftover sequences: 252337643 (81.59% of total)
+
+screen -X -S 3658886.id12 quit
+(Done!)
+
+
+screen -S id13
+screen -r 3658982.id13
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.bam:     371718518
+Total number duplicated alignments removed:     75407268 (20.29%)
+Duplicated alignments were found at:    55575227 different position(s)
+
+Total count of deduplicated leftover sequences: 296311250 (79.71% of total)
+
+screen -X -S 3658982.id13 quit
+(Done!)
+
+
+screen -S id14
+screen -r 3659046.id14
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.bam:     331552018
+Total number duplicated alignments removed:     62491484 (18.85%)
+Duplicated alignments were found at:    46773844 different position(s)
+
+Total count of deduplicated leftover sequences: 269060534 (81.15% of total)
+
+screen -X -S 3659046.id14 quit
+(Done!)
+
+
+screen -S id15
+screen -r 3659100.id15
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.bam:     275151992
+Total number duplicated alignments removed:     44302311 (16.10%)
+Duplicated alignments were found at:    32631944 different position(s)
+
+Total count of deduplicated leftover sequences: 230849681 (83.90% of total)
+
+screen -X -S 3659100.id15 quit
+(Done!)
+
+
+screen -S id16
+screen -r 3659246.id16
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.bam:     333344193
+Total number duplicated alignments removed:     63560904 (19.07%)
+Duplicated alignments were found at:    47774424 different position(s)
+
+Total count of deduplicated leftover sequences: 269783289 (80.93% of total)
+
+screen -X -S 3659246.id16 quit
+(Done!)
+
+
+screen -S id17
+screen -r 3659302.id17
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.bam:     323335664
+Total number duplicated alignments removed:     60701217 (18.77%)
+Duplicated alignments were found at:    45665264 different position(s)
+
+Total count of deduplicated leftover sequences: 262634447 (81.23% of total)
+
+screen -X -S 3659302.id17 quit
+(Done!)
+
+
+screen -S id18
+screen -r 3659375.id18
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.bam:     275818424
+Total number duplicated alignments removed:     47772625 (17.32%)
+Duplicated alignments were found at:    36080701 different position(s)
+
+Total count of deduplicated leftover sequences: 228045799 (82.68% of total)
+
+screen -X -S 3659375.id18 quit
+(Done!)
+
+
+screen -S id19
+screen -r 3659435.id19
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.bam:     309194451
+Total number duplicated alignments removed:     54196785 (17.53%)
+Duplicated alignments were found at:    41307887 different position(s)
+
+Total count of deduplicated leftover sequences: 254997666 (82.47% of total)
+
+screen -X -S 3659435.id19 quit
+(Done!)
+
+
+screen -S id20
+screen -r 3659509.id20
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+deduplicate_bismark -p --bam /storage09/nawan2/BAM_Files_updated/6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.bam --output_dir /storage09/nawan2/Deduplicated_Files
+
+Total number of alignments analysed in /storage09/nawan2/BAM_Files_updated/6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.bam:     318390478
+Total number duplicated alignments removed:     56788016 (17.84%)
+Duplicated alignments were found at:    42294591 different position(s)
+
+Total count of deduplicated leftover sequences: 261602462 (82.16% of total)
+
+screen -X -S 3659509.id20 quit
+(Done!)
+
+
+
+##############################################################################################################
+
+### List of all deduplicated files
+
+1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+
+cd /storage09/nawan2/Deduplicated_Files
+
+# ID-1
+cat 1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-2
+cat 1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-3
+cat 2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-4
+cat 3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-5
+cat 3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-6
+cat 3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-7
+cat 3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-8
+cat 4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-9
+cat 4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-10
+cat 4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-11
+cat 4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-12
+cat 4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-13
+cat 4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-14
+cat 4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-15
+cat 4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-16
+cat 4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-17
+cat 6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-18
+cat 6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-19
+cat 6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+# ID-20
+cat 6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplication_report.txt
+
+
+##############################################################################################################
+
+### DNA Methylation Extractor (bedGraph files)
+
+# NOTE: the following codes stopped after a while, so creating a folder for each and redoing them
+screen -S id1to10
+screen -r 1972314.id1to10
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+
+screen -X -S 1972314.id1to10 quit
+(Stopped!)
+
+
+screen -S id11to20
+screen -r 3026928.id11to20
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.deduplicated.bam && \
+bismark_methylation_extractor --bedGraph -p --multicore 4 --output /storage09/nawan2/bedGraph_Files /storage09/nawan2/Deduplicated_Files/6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+
+screen -X -S 3026928.id11to20 quit
+(Stopped!)
+
+# Creating one folder for each ID
+
+cd /storage09/nawan2/
+
+mkdir IDwise_Methylation_Extraction_Files
+
+cd /storage09/nawan2/IDwise_Methylation_Extraction_Files
+mkdir ID01
+mkdir ID02
+mkdir ID03
+mkdir ID04
+mkdir ID05
+mkdir ID06
+mkdir ID07
+mkdir ID08
+mkdir ID09
+mkdir ID10
+mkdir ID11
+mkdir ID12
+mkdir ID13
+mkdir ID14
+mkdir ID15
+mkdir ID16
+mkdir ID17
+mkdir ID18
+mkdir ID19
+mkdir ID20
+
+# Deleting due to space problem, I'll run one at a time and see how much space files related to each ID takes 
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID01
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID02
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID03
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID04
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID05
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID06
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID07
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID08
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID09
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID10
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID11
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID12
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID13
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID14
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID15
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID16
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID17
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID18
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID19
+rm -r /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID20
+
+# ID-1 
+screen -S id1
+screen -r 4128701.id1
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID01 /storage09/nawan2/Deduplicated_Files/1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 4128701.id1 quit
+(Done!)
+
+# ID-2 (Due, eliminated)
+screen -S id2
+screen -r 4129820.id2
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID02 /storage09/nawan2/Deduplicated_Files/1_25_23_0_3M_AAGACCGT-CAATCGAC_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 4129820.id2 quit
+(Eliminated!)
+
+# ID-3 
+screen -S id3
+screen -r 4129945.id3
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID03 /storage09/nawan2/Deduplicated_Files/2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 4129945.id3 quit
+(Done!)
+
+# ID-4 
+screen -S id4
+screen -r 4130070.id4
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID04 /storage09/nawan2/Deduplicated_Files/3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 4130070.id4 quit
+(Done!)
+
+# ID-5 (Due, eliminated)
+screen -S id5
+screen -r 135313.id5
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID05 /storage09/nawan2/Deduplicated_Files/3_23_23_0_3M_GAGAGTAC-TGCTTCCA_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 135313.id5 quit
+(Eliminated!)
+
+# ID-6 
+screen -S id6
+screen -r 4130481.id6
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 16 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID06 /storage09/nawan2/Deduplicated_Files/3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 4130481.id6 quit
+(Done!)
+
+# ID-7 
+screen -S id7
+screen -r 4130599.id7
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 4 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID07 /storage09/nawan2/Deduplicated_Files/3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 4130599.id7 quit
+(Done!)
+
+# ID-8 
+screen -S id8
+screen -r 259153.id8
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID08 /storage09/nawan2/Deduplicated_Files/4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 259153.id8 quit
+(Done!)
+
+# ID-9 
+screen -S id9
+screen -r 259271.id9
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID09 /storage09/nawan2/Deduplicated_Files/4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 259271.id9 quit
+(Done!)
+
+# ID-10
+screen -S id10
+screen -r 259384.id10
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID10 /storage09/nawan2/Deduplicated_Files/4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+
+screen -X -S 259384.id10 quit
+(Done!)
+
+# ID-11 
+screen -S id11
+screen -r 259475.id11
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID11 /storage09/nawan2/Deduplicated_Files/4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 259475.id11 quit
+(Done!)
+
+# ID-12 
+screen -S id12
+screen -r 259570.id12
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID12 /storage09/nawan2/Deduplicated_Files/4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 259570.id12 quit
+(Done!)
+
+# ID-13 
+screen -S id13
+screen -r 259664.id13
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID13 /storage09/nawan2/Deduplicated_Files/4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 259664.id13 quit
+(Done!)
+
+# ID-14 
+screen -S id14
+screen -r 259826.id14
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID14 /storage09/nawan2/Deduplicated_Files/4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 259826.id14 quit
+(Done!)
+
+# ID-15 
+screen -S id15
+screen -r 72340.id15
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID15 /storage09/nawan2/Deduplicated_Files/4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 72340.id15 quit
+(Done!)
+
+# ID-16
+screen -S id16
+screen -r 72453.id16
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID16 /storage09/nawan2/Deduplicated_Files/4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 72453.id16 quit
+(Done!)
+
+# ID-17
+screen -S id17
+screen -r 72581.id17
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID17 /storage09/nawan2/Deduplicated_Files/6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 72581.id17 quit
+(Done!)
+
+# ID-18
+screen -S id18
+screen -r 72706.id18
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID18 /storage09/nawan2/Deduplicated_Files/6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 72706.id18 quit
+(Done!)
+
+# ID-19
+screen -S id19
+screen -r 72800.id19
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID19 /storage09/nawan2/Deduplicated_Files/6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.deduplicated.bam 
+
+screen -X -S 72800.id19 quit
+(Done!)
+
+# ID-20
+screen -S id20
+screen -r 72966.id20
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+bismark_methylation_extractor --bedGraph -p --multicore 8 --ignore 5 --ignore_r2 5 --ignore_3prime 5 --ignore_3prime_r2 5 --output /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID20 /storage09/nawan2/Deduplicated_Files/6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.bam
+
+screen -X -S 72966.id20 quit
+(Done!)
+
+##############################################################################################################
+
+### Names of all .bismark.cov.gz files by group
+
+# ID-04
+3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-06
+3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-02
+(eliminated)
+# ID-03
+2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-17
+6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+
+
+# ID-12
+4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-13
+4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-09
+4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-11
+4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-08
+4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+
+
+# ID-16
+4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-01
+1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-07
+3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-19
+6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-18
+6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+
+
+# ID-14
+4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-05
+(eliminated)
+# ID-10
+4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-15
+4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+# ID-20
+6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+##############################################################################################################
+
+### Collapse CpGs across strands
+
+# Sample code
+coverage2cytosine --genome_folder /path/to/genome/ --merge_CpG -o outFile_prefix sampleID_pe.deduplicated.bismark.cov.gz
+
+mkdir Collapse_CpGs_IDwise
+
+
+
+# ID-g11 
+screen -S g11
+screen -r 339046.g11
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g11.XX_C.3_2_23_0_3M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID04/3_2_23_0_3M_TTCCAGGT-AAGCACTG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339046.g11 quit
+(Done!)
+
+# ID-g12
+screen -S g12
+screen -r 339104.g12
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g12.XX_C.3_23_23_1_3M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID06/3_23_23_1_3M_TACGGTCT-GCAATGGA_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339104.g12 quit
+(Done!)
+
+# ID-g13
+(Eliminated!)
+
+# ID-g14
+screen -S g14
+screen -r 339184.g14
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g14.XX_C.2_23_23_0_5M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID03/2_23_23_0_5M_CAGGTTCA-GGCGTTAT_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339184.g14 quit
+(Done!)
+
+# ID-g15
+screen -S g15
+screen -r 339234.g15
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g15.XX_C.6_24_23_0_2M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID17/6_24_23_0_2M_TAGGAGCT-GTTAAGGC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339234.g15 quit
+(Done!)
+
+
+# ID-g21
+screen -S g21
+screen -r 339299.g21
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g21.XX_T.4_24_23_0_2M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID12/4_24_23_0_2M_TACTCCAG-CCTATACC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339299.g21 quit
+(Done!)
+
+# ID-g22
+screen -S g22
+screen -r 339350.g22
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g22.XX_T.4_24_23_0_4M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID13/4_24_23_0_4M_AGTGACCT-CTCCTAGA_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339350.g22 quit
+(Done!)
+
+# ID-g23
+screen -S g23
+screen -r 339400.g23
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g23.XX_T.4_20_23_0_3M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID09/4_20_23_0_3M_AGCCTATC-GTTACGCA_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339400.g23 quit
+(Done!)
+
+# ID-g24
+screen -S g24
+screen -r 339460.g24
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g24.XX_T.4_20_23_1_3M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID11/4_20_23_1_3M_TCATCTCC-CTAGCAAG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339460.g24 quit
+(Done!)
+
+# ID-g25
+screen -S g25
+screen -r 339528.g25
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g25.XX_T.4_06_23_0_3M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID08/4_06_23_0_3M_CCAGTATC-ATCTCGCT_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339528.g25 quit
+(Done!)
+
+
+# ID-g31
+screen -S g31
+screen -r 339645.g31
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g31.XY_C.4_24_23_1_4M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID16/4_24_23_1_4M_TTGCGAGA-GTGCCATA_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339645.g31 quit
+(Done!)
+
+# ID-g32
+screen -S g32
+screen -r 339715.g32
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g32.XY_C.1_18_23_0_4M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID01/1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339715.g32 quit
+(Done!)
+
+# ID-g33
+screen -S g33
+screen -r 339789.g33
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g33.XY_C.3_9_23_0_5M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID07/3_9_23_0_5M_CGAATTGC-CACCTTAC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339789.g33 quit
+(Done!)
+
+# ID-g34
+screen -S g34
+screen -r 339875.g34
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g34.XY_C.6_24_23_0_4M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID19/6_24_23_0_4M_GGAAGAGA-TTCTCTCG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339875.g34 quit
+(Done!)
+
+# ID-g35
+screen -S g35
+screen -r 339969.g35
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g35.XY_C.6_24_23_0_3M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID18/6_24_23_0_3M_TCGGATTC-TAGTTGCG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 339969.g35 quit
+(Done!)
+
+
+# ID-g41
+screen -S g41
+screen -r 340047.g41
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g41.XY_T.4_24_23_0_5M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID14/4_24_23_0_5M_CTGTACCA-AGTCTGTG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 340047.g41 quit
+(Done!)
+
+# ID-g42
+(Eliminated!)
+
+# ID-g43
+screen -S g43
+screen -r 340134.g43
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g43.XY_T.4_20_23_1_1M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID10/4_20_23_1_1M_TCTACGCA-GGCTATTG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 340134.g43 quit
+(Done!)
+
+# ID-g44
+screen -S g44
+screen -r 340200.g44
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g44.XY_T.4_24_23_0_8M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID15/4_24_23_0_8M_GCAATTCC-TGTTCGAG_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 340200.g44 quit
+(Done!)
+
+# ID-g45
+screen -S g45
+screen -r 340272.g45
+TMOUT=$((96 * 3600))
+export TMOUT
+conda activate bismark
+cd /storage09/nawan2/Collapse_CpGs_IDwise
+coverage2cytosine --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ --merge_CpG -o g45.XY_T.6_24_23_1_2M /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID20/6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.bismark.cov.gz
+
+screen -X -S 340272.g45 quit
+(Done!)
+
+##############################################################################################################
+
+
+
+
+##############################################################################################################
+##############################################################################################################
+##############################################################################################################
+
+##############################################################################################################
+
+### How to run Bismark alignment in batches:
+
+# Create batches of samples (adjust as needed)
+batch1="sampleID1 sampleID2 sampleID3 sampleID4"
+batch2="sampleID5 sampleID6 sampleID7 sampleID8"
+batch3="sampleID9 sampleID10 sampleID11 sampleID12"
+batch4="sampleID13 sampleID14 sampleID15 sampleID16"
+batch5="sampleID17 sampleID18 sampleID19 sampleID20"
+
+# Run Bismark for each batch
+bismark --multicore 30 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/{$batch1}_merged_R1_001.fastq -2 /storage09/nawan2/{$batch1}_merged_R2_001.fastq &
+
+bismark --multicore 30 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/{$batch2}_merged_R1_001.fastq -2 /storage09/nawan2/{$batch2}_merged_R2_001.fastq &
+
+# Repeat for batches 3 through 5
+
+
+##############################################################################################################
+
+### Kill all screen sessions
+
+pkill screen
+
+
+##############################################################################################################
+
+### Kill all screen sessions except a particular one
+
+# Get the list of all screen sessions
+sessions=$(screen -ls | grep -oE "[0-9]+\.id[0-9]+")
+
+# Iterate through each session ID
+for session in $sessions; do
+    # Check if the session ID is not the one you want to keep (38770.id6)
+    if [ "$session" != "38770.id6" ]; then
+        # Kill the screen session
+        screen -X -S $session quit
+    fi
+done
+
+### Suggestions from Andy:
+
+# Run Bismark for each batch
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/{$batch1}_merged_R1_001.fastq -2 /storage09/nawan2/{$batch1}_merged_R2_001.fastq &
+wait
+
+bismark --multicore 8 --genome_folder /storage09/nawan2/Reference_Genome_Mouse/ -1 /storage09/nawan2/{$batch2}_merged_R1_001.fastq -2 /storage09/nawan2/{$batch2}_merged_R2_001.fastq &
+wait
+
+
+##############################################################################################################
+
+### Check number of cores and RAM
+
+# Check number of cores
+nproc
+lscpu
+
+# Display CPU usage per core
+mpstat -P ALL
+
+# Check RAM
+free -h
+
+##############################################################################################################
+
+### To see when the screen session named "2776699.id3" started
+
+screen -ls
+
+##############################################################################################################
+
+### Remove a directory
+
+rm -r /path/to/directory
+
+rm -r /storage09/nawan2/BAM_Files
+
+
+cd /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID20/
+ls
+
+rm -i CHG_OB_1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.txt
+rm -i CHG_OT_1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.txt
+rm -i CHH_OB_1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.txt
+rm -i CHH_OT_1_18_23_0_4M_GAACGAAG-GGTGATTC_merged_R1_001_bismark_bt2_pe.deduplicated.txt
+
+rm CHG_OB_6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.txt
+rm CHG_OT_6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.txt
+rm CHH_OB_6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.txt
+rm CHH_OT_6_24_23_1_2M_CTCAGAAG-AACTTGCC_merged_R1_001_bismark_bt2_pe.deduplicated.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##############################################################################################################
+
+### Sort directories by size
+
+df -h /storage09/
+
+# More accurate to see size of folders within a directory
+du -h --max-depth=1 /storage09/nawan2/ | sort -h
+
+du -h --max-depth=1 /storage09/nawan2/Collapse_CpGs_IDwise/ | sort -h
+
+
+du -h --max-depth=1 /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID03/ | sort -h
+
+# More accurate to see size of files within a folder
+ls -lh /storage09/nawan2/IDwise_Methylation_Extraction_Files/ID03/
+ls -lh /storage09/nawan2/Collapse_CpGs_IDwise
+
+##############################################################################################################
+
+### To see how much space is used
+
+df -h
+
+##############################################################################################################
+
+### Check CPU load
+
+mpstat -P ALL
+
+mpstat -P ALL | awk '/^Average:/ && $3 != 100 {print "Core " $2 " is active"}'
+
+top
+
+htop
+
+##############################################################################################################
+
+### Email a file to your email address from the server
+
+cat file_to_send.txt | mail -s "Subject of the email" nawan2@wisc.edu
+
+##############################################################################################################
+
+### Copy file from server using MobaXterm
+
+Left hand side of the window to navigate and download
+
+##############################################################################################################
+
